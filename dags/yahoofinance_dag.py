@@ -5,7 +5,7 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
 # Date, Yahoo Finance, and Pandas
-from datetime import timedelta
+from datetime import timedelta, datetime
 import yfinance as yf
 import pandas as pd
 
@@ -69,7 +69,7 @@ dag = DAG(
     description = 'A simple DAG using Yahoo Finance data',
     #schedule_interval = '0 18 * * 1-5',
     schedule_interval = '0 17 * * *',
-    start_date = days_ago(2)
+    start_date = datetime(2021, 2, 25)
 )
 
 # Initialize temp directory for data
