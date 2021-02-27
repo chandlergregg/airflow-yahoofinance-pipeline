@@ -10,7 +10,15 @@ import yfinance as yf
 import pandas as pd
 
 def download_market_data(ticker):
+    """
+    Downloads market data for given ticker between yesterday and today in 1m intervals
     
+    Args: 
+        ticker: ticker to download
+    Returns: 
+        None; Saves data as csv in working directory
+    """
+
     # Download data for yesterday and save as CSV
     start_date = days_ago(1)
     end_date = start_date + timedelta(days = 1)
@@ -18,11 +26,18 @@ def download_market_data(ticker):
     df.to_csv(f'{ticker}_data.csv', header = False)
 
 def query_data(**kwargs):
+    """
+    Queries data for given tickers and outputs daily low and high for those tickers
 
+    Args: 
+        **kwargs: contains 'tickers' list and Airflow context variables
+    Returns: 
+        None; writes files to date-specific folders
+    """
+
+    # Get variables from kwargs, create empty dataframe with columns
     ds = kwargs['ds']
     tickers = kwargs['tickers']
-
-    # Create empty dataframe with columns
     combined_df = pd.DataFrame()
 
     for ticker in tickers:
@@ -52,8 +67,9 @@ dag = DAG(
     'yahoo_finance_pipeline',
     default_args = default_args,
     description = 'A simple DAG using Yahoo Finance data',
-    schedule_interval = '0 18 * * 1-5',
-    start_date = days_ago(1)
+    #schedule_interval = '0 18 * * 1-5',
+    schedule_interval = '0 17 * * *',
+    start_date = days_ago(2)
 )
 
 # Initialize temp directory for data
